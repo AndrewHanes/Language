@@ -459,7 +459,10 @@ char *yytext;
 #include <stdlib.h>
 #include <stdio.h>
 #include "SymbolTable.h"
-#line 463 "Language.yy.c"
+
+SymTab s;
+Variable v;
+#line 466 "Language.yy.c"
 
 #define INITIAL 0
 
@@ -641,10 +644,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 7 "Language.lex"
+#line 10 "Language.lex"
 
 
-#line 648 "Language.yy.c"
+#line 651 "Language.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -729,60 +732,80 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 9 "Language.lex"
-return STRING;
+#line 12 "Language.lex"
+{ 
+	printf("VARIABLE: %s\n", yytext);
+}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 10 "Language.lex"
-return ASSIGNMENT;
+#line 15 "Language.lex"
+{
+	printf("ASSIGNMENT");
+}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 11 "Language.lex"
-return PLUS;
+#line 18 "Language.lex"
+{
+	printf("ADD");
+}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "Language.lex"
-return MINUS;
+#line 21 "Language.lex"
+{
+	printf("SUBTRACT");
+}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 13 "Language.lex"
-return MULT;
+#line 24 "Language.lex"
+{
+	printf("MULT");
+}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 14 "Language.lex"
-return DIVIDE;
+#line 27 "Language.lex"
+{
+	printf("DIVIDE");
+}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 15 "Language.lex"
-return LPAREN;
+#line 30 "Language.lex"
+{
+	printf("LPAREN");
+}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 16 "Language.lex"
-return RPAREN;
+#line 33 "Language.lex"
+{
+	printf("RPAREN");
+}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 17 "Language.lex"
-return LBRACE;
+#line 36 "Language.lex"
+{
+	printf("LBRACE");
+}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 18 "Language.lex"
-return RBRACE;
+#line 39 "Language.lex"
+{
+	printf("RBRACE");
+}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 21 "Language.lex"
+#line 44 "Language.lex"
 ECHO;
 	YY_BREAK
-#line 786 "Language.yy.c"
+#line 809 "Language.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1779,11 +1802,17 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 21 "Language.lex"
+#line 44 "Language.lex"
 
 
 
 int yywrap() {
-	return 1;
+	return 1; //scan forever
 }
+
+main(int argc, char* argv[]) {
+	yyin - stdin;
+	return yylex();
+}
+
 

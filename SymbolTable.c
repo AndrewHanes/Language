@@ -9,6 +9,7 @@ SymTab* mkSymTab() {
 	l->head = 0;
 	l->length = 0;
 	l->last = 0;
+	l->scopeLevel = 0;
 	return l;
 }
 
@@ -74,7 +75,7 @@ void leaveScope(SymTab* s) {
 	}
 	s->scopeLevel--;
 }
-
+/*
 int main() {
 	printf("Testing Symbol Table....\n");
 	int n = 5;
@@ -88,6 +89,4 @@ int main() {
 	printf("%d\n", *((int *) (lookupVariable(s, "test")->ptr)));
 	printf("%d\n", *((int *) (lookupVariable(s, "test2")->ptr)));
 	leaveScope(s);
-	printf("%d\n", *((int *) (lookupVariable(s, "test")->ptr)));
-	printf("%d\n", lookupVariable(s, "test2"));
-}
+}*/
