@@ -1,29 +1,33 @@
 %{
 #define YYDEBUG 1
 #include "SymbolTable.h"
-int lineNum = 1;
+
+int line = 1;
 %}
 
-%token ASSIGNMENT PLUS MINUS MULT DIVIDE LPAREN RPAREN LBRACE RBRACE STRING
-%token <ti> VAR
-%token <ti> INTEGER
+%union {
+double fval;
+char* s;
+Variable v;
+char boolean;
+}
+%token LPAREN RPAREN LBRACE RBRACE NEWLINE ASSIGNMENT
+%token <fval> INTEGER FLOATING ADDITION SUBTRACTION MULTIPLICATION DIVISION MODULUS 
+%token <boolean> EQUALITY LESS GREATER
+%token <v> VAR
 
 %%
-
-code: code scope| /* e */;
-
-scope: LBRACE expression RBRACE
-	{
-	};
-
-expression: INTEGER {}
-
-
+ program: ;
 %%
+
+#include Language.yy.c
 
 int yyerror(char* s) {
-	fprintf(stderr, "Error: %s\nOn line: %d\n", s, lineNum);
+	fprintf(stderr, "Error: %s at line %d\n", s, line);
 	return 0;
 }
 
-
+int main(int argc, char* argv[]) {
+	int result = yyparse();
+	return result;
+}
