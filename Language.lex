@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include "SymbolTable.h"
 
-/* Defines for consts */
-#define ASSIGNMENT ":="
-
 SymTab* s;
 
 %}
@@ -65,13 +62,13 @@ SymTab* s;
 \{	{
 	enterScope(s);
 	//printf("LBRACE");
-	return LBRACE:
+	return LBRACE;
 }
 \}	{
 	
 	leaveScope(s);
 	//printf("RBRACE");
-	return RBRACE:
+	return RBRACE;
 }
 
 \%	{

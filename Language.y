@@ -17,10 +17,25 @@ char boolean;
 %token <v> VAR
 
 %%
- program: ;
+program:program line NEWLINE {++line;} | /* e */ ;
+
+line: expr NEWLINE { }
+    | VAR ASSIGNMENT expr {
+    	//store var here
+    }
+    ;
+
+expr: INTEGER	{ }
+    | FLOATING	{ }
+    | VAR
+    | expr ADDITION expr
+    | expr SUBTRACTION expr
+    | expr MULTIPLICATION expr
+    | expr DIVISION expr
+    ;
 %%
 
-#include Language.yy.c
+#include "Language.yy.c"
 
 int yyerror(char* s) {
 	fprintf(stderr, "Error: %s at line %d\n", s, line);

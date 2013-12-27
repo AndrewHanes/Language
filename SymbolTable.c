@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "SymbolTable.h"
-#include "Types.h"
 
 SymTab* mkSymTab() {
 	SymTab* l =  (SymTab*) malloc(sizeof(SymTab));

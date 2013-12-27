@@ -8,23 +8,23 @@ LEX_FILES = Language.lex
 
 SOURCE = $(C_FILES) $(H_FILES) $(LEX_FILES)
 
-INTERMEDIATE = Language.yy.c SymbolTable.o Language.tab.c
+INTERMEDIATE = Language.yy.c SymbolTable.o Language.tab.c Language.output
 
 EXECS = Language
 
 all:	Language
 
 Language:	Language.tab.c Language.yy.c SymbolTable.o
-	$(CC) $(CCFLAGS) -o Language Language.tab.c Language.yy.c SymbolTable.o
+	$(CC) $(CCFLAGS) -o Language Language.tab.c SymbolTable.o
 
 SymbolTable.o:
 	$(CC) $(CCFLAGS) -c $(C_FILES) $(H_FILES)
 
-Language.yy.c:
+Language.yy.c:	Language.tab.c
 	flex -oLanguage.yy.c Language.lex
 
-Language.tab.c:	Language.y SymbolTable.h
-	bison -v  Language.y
+Language.tab.c:	Language.y SymbolTable.o
+	bison -v Language.y
 
 clean:
 	rm $(INTERMEDIATE) $(EXECS)
