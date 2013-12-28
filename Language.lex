@@ -5,6 +5,7 @@
 #include "SymbolTable.h"
 
 #ifdef TestLex
+#define END 10
 #define LPAREN 258
 #define FUNC 258
 #define RPAREN 259
@@ -41,6 +42,7 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	#endif
 	return FUNC;
 }
+
 [A-z]+	{ 
 	#ifndef TestLex
 	yylval.tok.val = 0;
@@ -122,11 +124,11 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	return GREATER;
 }
 
-\n+	{
-	return NEWLINE;
+\; {
+	return END;
 }
 
-[ \t]  ;
+[ \n\t]+  ;
 
 .	{
 	printf("ERROR: Unknown Token %s\n", yytext);

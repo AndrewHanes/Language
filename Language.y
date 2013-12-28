@@ -2,13 +2,13 @@
 #define YYDEBUG 1
 #include "SymbolTable.h"
 SymTab* s;
-int line = 1;
+int statement = 0;
 %}
 
 %union {
 	TokenInfo tok;
 }
-%token LPAREN RPAREN LBRACE RBRACE NEWLINE ASSIGNMENT
+%token LPAREN RPAREN LBRACE RBRACE NEWLINE ASSIGNMENT TRUE FALSE END
 %token <tok> INTEGER FLOATING ADDITION SUBTRACTION MULTIPLICATION DIVISION MODULUS FUNC VAR
 %token <tok> EQUALITY LESS GREATER
 %type <tok> expr
@@ -16,13 +16,13 @@ int line = 1;
 %type <tok> program
 
 %%
-program: program line { ++line; } 
+program: program line { ++statement; } 
        | /* e */ ;
 
-line: expr NEWLINE {printf("%g\n", $1.val);}
-	| VARTERM NEWLINE
-	| LBRACE NEWLINE { enterScope(s); }
-	| RBRACE NEWLINE { leaveScope(s); }
+line: expr END {printf("%g\n", $1.val);}
+	| VARTERM END
+	| LBRACE { enterScope(s); }
+	| RBRACE { leaveScope(s); }
     ;
 VARTERM: VAR ASSIGNMENT expr {
 		storeVar(s, mkVariable(FLOATING, $3.val, $1.name, s->scopeLevel));
@@ -47,7 +47,7 @@ expr: FLOATING { $$ = $1; }
 #include "Language.yy.c"
 
 int yyerror(char* s) {
-	fprintf(stderr, "Error: %s at line %d\n", s, line);
+	fprintf(stderr, "Error: %s at statement %d\n", s, statement);
 	return 0;
 }
 
