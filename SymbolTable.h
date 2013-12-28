@@ -8,6 +8,11 @@ typedef struct Variable_s {
 	int scopeLevel;
 } Variable;
 
+typedef struct TokenInformation {
+	char* name;
+	double val;
+} TokenInfo;
+
 typedef struct Node_s {
 	struct Node_s* next;
 	struct Node_s* prev;

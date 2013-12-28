@@ -4,12 +4,28 @@
 #include <stdio.h>
 #include "SymbolTable.h"
 
-SymTab* s;
-
+#ifdef TestLex
+#define LPAREN 258
+#define RPAREN 259
+#define LBRACE 260
+#define RBRACE 261
+#define NEWLINE 262
+#define ASSIGNMENT 263
+#define INTEGER 264
+#define FLOATING 265
+#define ADDITION 266
+#define SUBTRACTION 267
+#define MULTIPLICATION 268
+#define DIVISION 269
+#define MODULUS 270
+#define EQUALITY 271
+#define LESS 272
+#define GREATER 273
+#define VAR 274
+#endif
 %}
 
 %%
-
 \/\*.*\*\/ {
 	//Do nothing
 }
@@ -18,16 +34,21 @@ SymTab* s;
 	//Do nothing
 }
 [A-z]+	{ 
-	//printf("VARIABLE: %s\n", yytext);
+	yylval.tok.val = 0;
+	yylval.tok.name = (char*) strdup(yytext);
 	return VAR;
 }
 
 [0-9]+ {
 	//printf("NUMBER");
+	yylval.tok.val = atoi(yytext);
+	yylval.tok.name = 0;
 	return INTEGER;
 }
 
 [0-9]+.[0-9]+ {
+	yylval.tok.val = atoi(yytext);
+	yylval.tok.name = 0;
 	//printf("FLOAT");
 	return FLOATING;
 }
@@ -60,13 +81,11 @@ SymTab* s;
 	return RPAREN;
 }
 \{	{
-	enterScope(s);
 	//printf("LBRACE");
 	return LBRACE;
 }
 \}	{
 	
-	leaveScope(s);
 	//printf("RBRACE");
 	return RBRACE;
 }
@@ -90,6 +109,9 @@ SymTab* s;
 \n	{
 	return NEWLINE;
 }
+
+[ ]  ;
+
 .	{
 	printf("ERROR: Unknown Token %s\n", yytext);
 }
@@ -99,12 +121,11 @@ SymTab* s;
 int yywrap() {
 	return 1; //scan forever
 }
-/*
+#ifdef TestLex
 int main(int argc, char* argv[]) {
-	s = mkSymTab();
 	yyin = stdin;
 	if(argc > 1)
 		yyin = fopen(argv[1], "r");
 	return yylex();
 }
-*/
+#endif

@@ -6,32 +6,21 @@ int line = 1;
 %}
 
 %union {
-double fval;
-char* s;
-Variable v;
-char boolean;
+	TokenInfo tok;
 }
-%token LPAREN RPAREN LBRACE RBRACE NEWLINE ASSIGNMENT
-%token <fval> INTEGER FLOATING ADDITION SUBTRACTION MULTIPLICATION DIVISION MODULUS 
-%token <boolean> EQUALITY LESS GREATER
-%token <v> VAR
+%token LPAREN RPAREN LBRACE RBRACE NEWLINE ASSIGNMENT VAR
+%token <tok> INTEGER FLOATING ADDITION SUBTRACTION MULTIPLICATION DIVISION MODULUS
+%token <tok> EQUALITY LESS GREATER
+%type <tok> expr
+%type <tok> line
 
 %%
-program:program line NEWLINE {++line;} | /* e */ ;
+program: program line {} | /* e */ ;
 
-line: expr NEWLINE { }
-    | VAR ASSIGNMENT expr {
-    	//store var here
-    }
+line: expr NEWLINE {printf("GOT: %g\n", $1.val);}
     ;
 
-expr: INTEGER	{ }
-    | FLOATING	{ }
-    | VAR
-    | expr ADDITION expr
-    | expr SUBTRACTION expr
-    | expr MULTIPLICATION expr
-    | expr DIVISION expr
+expr: INTEGER	{ $$ = $1; }
     ;
 %%
 
