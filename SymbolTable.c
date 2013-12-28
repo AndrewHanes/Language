@@ -12,10 +12,10 @@ SymTab* mkSymTab() {
 	return l;
 }
 
-Variable* mkVariable(int type, void* ptr, char* name, int scopeLevel) {
+Variable* mkVariable(int type, double data, char* name, int scopeLevel) {
 	Variable* v = (Variable*) malloc(sizeof(Variable));
 	v->type = type;
-	v->ptr = ptr;
+	v->data = data;
 	v->name = name;
 	v->scopeLevel = scopeLevel;
 	return v;
@@ -30,6 +30,7 @@ Node* mkNode(Node* prev, Variable* data, Node* next) {
 }
 
 void storeVar(SymTab* l, Variable* data) {
+	//printf("STORING %s: %g\n", data->name, data->data);
 	Node* n = mkNode(0, data, 0);
 	if(l->length == 0) {
 		l->head = n;
@@ -85,7 +86,7 @@ int main() {
 	enterScope(s);
 	storeVar(s, mkVariable(1, &a, "test", s->scopeLevel));
 	storeVar(s, mkVariable(1, &x, "test2", s->scopeLevel));
-	printf("%d\n", *((int *) (lookupVariable(s, "test")->ptr)));
-	printf("%d\n", *((int *) (lookupVariable(s, "test2")->ptr)));
+	printf("%d\n", *((int *) (lookupVariable(s, "test")->data)));
+	printf("%d\n", *((int *) (lookupVariable(s, "test2")->data)));
 	leaveScope(s);
 }*/

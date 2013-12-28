@@ -46,6 +46,7 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	yylval.tok.val = 0;
 	yylval.tok.name = (char*) strdup(yytext);
 	#endif
+	//printf("VARIABLE");
 	return VAR;
 }
 
@@ -126,6 +127,7 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 }
 
 [ ]  ;
+[\t] ;
 
 .	{
 	printf("ERROR: Unknown Token %s\n", yytext);

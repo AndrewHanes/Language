@@ -3,7 +3,7 @@
 
 typedef struct Variable_s {
 	int type;
-	void* ptr;
+	double data;
 	char* name;
 	int scopeLevel;
 } Variable;
@@ -28,7 +28,7 @@ typedef struct SymTab_s {
 
 SymTab* mkSymTab();
 
-Variable* mkVariable(int type, void* ptr, char* name, int scopeLevel);
+Variable* mkVariable(int type, double data, char* name, int scopeLevel);
 
 void storeVar(SymTab* l, Variable* data);
 
