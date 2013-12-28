@@ -122,12 +122,11 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	return GREATER;
 }
 
-\n	{
+\n+	{
 	return NEWLINE;
 }
 
-[ ]  ;
-[\t] ;
+[ \t]  ;
 
 .	{
 	printf("ERROR: Unknown Token %s\n", yytext);
