@@ -6,6 +6,7 @@
 
 #ifdef TestLex
 #define LPAREN 258
+#define FUNC 258
 #define RPAREN 259
 #define LBRACE 260
 #define RBRACE 261
@@ -33,25 +34,39 @@
 \/\/.*\n {
 	//Do nothing
 }
-[A-z]+	{ 
+func[ ]+[A-z]+\(([A-z]+.*)*\) {
+	#ifndef TestLex
 	yylval.tok.val = 0;
 	yylval.tok.name = (char*) strdup(yytext);
+	#endif
+	return FUNC;
+}
+[A-z]+	{ 
+	#ifndef TestLex
+	yylval.tok.val = 0;
+	yylval.tok.name = (char*) strdup(yytext);
+	#endif
 	return VAR;
 }
 
-[0-9]+ {
-	//printf("NUMBER");
-	yylval.tok.val = atoi(yytext);
-	yylval.tok.name = 0;
-	return INTEGER;
-}
-
 [0-9]+.[0-9]+ {
-	yylval.tok.val = atoi(yytext);
+	#ifndef TestLex
+	yylval.tok.val = atof(yytext);
 	yylval.tok.name = 0;
+	#endif
 	//printf("FLOAT");
 	return FLOATING;
 }
+
+[0-9]+ {
+	#ifndef TestLex
+	yylval.tok.val = atoi(yytext);
+	yylval.tok.name = 0;
+	#endif
+	//printf("NUMBER");
+	return INTEGER;
+}
+
 :=	{
 	//printf("ASSIGNMENT");
 	return ASSIGNMENT;
