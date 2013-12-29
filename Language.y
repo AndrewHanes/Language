@@ -1,6 +1,7 @@
 %{
 #define YYDEBUG 1
 #include "SymbolTable.h"
+#include <inttypes.h>
 SymTab* s;
 int statement = 0;
 %}
@@ -9,17 +10,19 @@ int statement = 0;
 	TokenInfo tok;
 }
 %token LPAREN RPAREN LBRACE RBRACE NEWLINE ASSIGNMENT TRUE FALSE END
-%token <tok> INTEGER FLOATING ADDITION SUBTRACTION MULTIPLICATION DIVISION MODULUS FUNC VAR
+%token <tok> INTEGER FLOATING FUNC VAR
+%token <tok> DIVISION SUBTRACTION
+%token <tok> MULTIPLICATION MODULUS ADDITION 
 %token <tok> EQUALITY LESS GREATER
 %type <tok> expr
-%type <tok> line
+%type <tok> statement 
 %type <tok> program
 
 %%
-program: program line { ++statement; } 
+program: program statement { ++statement; } 
        | /* e */ ;
 
-line: expr END {printf("%g\n", $1.val);}
+statement: expr END {printf("%g\n", $1.val);}
 	| VARTERM END
 	| LBRACE { enterScope(s); }
 	| RBRACE { leaveScope(s); }
@@ -29,19 +32,19 @@ VARTERM: VAR ASSIGNMENT expr {
 	}
 	;
 
-expr: FLOATING { $$ = $1; }
-    | VAR { 
+expr: VAR { 
     		$$.val = lookupVariable(s, $1.name)->data; 
 		//printf("LOOKED UP: %g\n", $$.val);
 	}
-    		
-    | INTEGER	{ $$ = $1; $$.val = (int) $$.val; } 
     | LPAREN expr RPAREN { $$.val = $2.val; }
     | expr ADDITION expr { $$.val = $1.val + $3.val; }
-    | expr SUBTRACTION expr { $$.val = $1.val + $3.val; }
+    | expr SUBTRACTION expr { $$.val = $1.val - $3.val; }
     | expr MULTIPLICATION expr { $$.val = $1.val * $3.val; }
     | expr DIVISION expr { $$.val = $1.val / $3.val; }
-    ;
+    | SUBTRACTION expr { $$.val = -1 * $2.val; }
+    | INTEGER	{ $$ = $1; $$.val = (int) $$.val; } 
+    | FLOATING { $$ = $1; }
+     ; 
 %%
 
 #include "Language.yy.c"

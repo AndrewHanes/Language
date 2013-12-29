@@ -35,6 +35,14 @@
 \/\/.*\n {
 	//Do nothing
 }
+
+goto[ ]+\([A-z]+\) {
+	FILE* f = yyin;
+	if(yyin == stdin) {
+		//printf(stderr, "Cannot goto using stdin\n");
+		return END;
+	}
+}
 func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	#ifndef TestLex
 	yylval.tok.val = 0;
@@ -51,8 +59,12 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	//printf("VARIABLE");
 	return VAR;
 }
+\-	{
+	//printf("SUBTRACT");
+	return SUBTRACTION;
+}
 
-[0-9]+.[0-9]+ {
+[0-9]+\.[0-9]+ {
 	#ifndef TestLex
 	yylval.tok.val = atof(yytext);
 	yylval.tok.name = 0;
@@ -70,17 +82,13 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	return INTEGER;
 }
 
-:=	{
+\:=	{
 	//printf("ASSIGNMENT");
 	return ASSIGNMENT;
 }
 \+	{
 	//printf("ADD");
 	return ADDITION;
-}
-\-	{
-	//printf("SUBTRACT");
-	return SUBTRACTION;
 }
 \*	{
 	//printf("MULT");
@@ -128,10 +136,11 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 	return END;
 }
 
-[ \n\t]+  ;
+[ \n\t] ;
 
+[ ] ;
 .	{
-	printf("ERROR: Unknown Token %s\n", yytext);
+	fprintf(stderr, "ERROR: Unknown Token %s\n", yytext);
 }
 
 %%
