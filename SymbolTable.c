@@ -54,7 +54,7 @@ Variable* lookupVariable(SymTab* l, char* varName) {
 		}
 		n = n->prev;
 	}
-	return 0;
+	return NULL;
 }
 
 void enterScope(SymTab* s) {

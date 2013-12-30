@@ -138,7 +138,6 @@ func[ ]+[A-z]+\(([A-z]+.*)*\) {
 
 [ \n\t] ;
 
-[ ] ;
 .	{
 	fprintf(stderr, "ERROR: Unknown Token %s\n", yytext);
 }
